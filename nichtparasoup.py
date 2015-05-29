@@ -83,6 +83,7 @@ from crawler.ninegag import NineGag
 from crawler.instagram import Instagram
 from crawler.fourchan import Fourchan
 from crawler.giphy import Giphy
+from crawler.bildschirmarbeiter import Bildschirmarbeiter
 
 
 def get_crawlers(configuration, section):
@@ -139,14 +140,14 @@ def get_crawlers(configuration, section):
             crawler_uris = ["http://boards.4chan.org/%s/" % site for site in crawler_sites]
         elif crawler_class == Giphy:
             crawler_uris = ["http://api.giphy.com/v1/gifs/search?q=%s" % site for site in crawler_sites]
+        elif crawler_class == Bildschirmarbeiter:
+            crawler_uris = ["http://www.bildschirmarbeiter.com/plugs/category/%s/" % site for site in crawler_sites]
 
         crawlers += [crawler_class(crawler_uri) for crawler_uri in crawler_uris]
 
     return crawlers
 
 sources = get_crawlers(config, "Sites")
-if not sources:
-    raise Exception("no sources configured")
 
 
 # wrapper function for cache filling
@@ -275,18 +276,10 @@ class NichtParasoup(object):
 # main function how to run
 # on start-up, fill the cache and get up the webserver
 if __name__ == "__main__":
-    try:
-        # start the cache filler tread
-        cache_fill_thread = threading.Thread(target=cache_fill_loop)
-        cache_fill_thread.daemon = True
-        cache_fill_thread.start()
-    except (KeyboardInterrupt, SystemExit):
-        # end the cache filler thread properly
-        min_cache_imgs = -1  # stop cache_fill-inner_loop
-
-    # give the cache_fill some time in advance
-    time.sleep(1.337)
-
-    # start webserver after a bit of delay
-    run_simple(nps_bindip, nps_port, NichtParasoup(), use_debugger=False)
-
+    sources = get_crawlers(config, "Sites")
+    while True:
+        for s in sources:
+            logging.info('crawling {}'.format(s))
+            s.crawl()
+    if not sources:
+        raise Exception("no sources configured")

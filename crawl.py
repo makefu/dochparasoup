@@ -141,7 +141,7 @@ def get_crawlers(configuration, section):
         elif crawler_class == Giphy:
             crawler_uris = ["http://api.giphy.com/v1/gifs/search?q=%s" % site for site in crawler_sites]
         elif crawler_class == Bildschirmarbeiter:
-            crawler_uris = ["http://www.bildschirmarbeiter.com/plugs/category/%s/" % site for site in crawler_sites]
+            crawler_uris = ["http://www.bildschirmarbeiter.com/plugs/category/%s/P120/" % site for site in crawler_sites]
 
         crawlers += [crawler_class(crawler_uri) for crawler_uri in crawler_uris]
 

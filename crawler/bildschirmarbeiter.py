@@ -1,5 +1,5 @@
 
-
+import urllib
 try:
     from urllib.parse import urljoin    # py3
 except ImportError:
@@ -42,7 +42,11 @@ class Bildschirmarbeiter(Crawler):
         new_imgs=0
         for plug in page.find_all("a",class_="plugthumb"):
             # grab each 'plug' from the current page
-            (npage,base,_) = self._fetch_remote_html(plug["href"])
+            try:
+                (npage,base,_) = self._fetch_remote_html(plug["href"])
+            except urllib.error.HTTPError as e:
+                log.warn("could not fetch page {}".format(plug["href"]))
+                continue
             for gal_divs in npage.find_all("div",class_="gallery"):
                 # this may be skipped if there is no gallery
                 for img in gal_divs.find_all("img"):
@@ -51,7 +55,6 @@ class Bildschirmarbeiter(Crawler):
         for page_link in page.find("div",id="col1_content").find_all("a"):
             if page_link.get_text().strip() == ">":
                 self.__next = page_link['href']
-
 
         if not self.__next:
             raise CrawlerError("at last page for url {} ?".format(uri))
