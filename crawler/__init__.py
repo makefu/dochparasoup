@@ -291,26 +291,28 @@ class Crawler(object):
         now = time.time()
         if not self.__crawlingStarted:
             self.__crawlingStarted = now
-        elif self.__crawlingStarted <= now - self.__class__.reset_delay():
-            self.__class__._log("debug", "instance %s starts at front" % (repr(self)))
+        elif self.__crawlingStarted <= now - self.reset_delay():
+            self._log("debug", "instance %s starts at front" % (repr(self)))
             self.__crawlingStarted = now
             self._restart_at_front()
 
-        self.__class__._log("debug", "instance %s starts crawling" % (repr(self)))
+        self._log("debug", "instance %s starts crawling" % (repr(self)))
         try:
             self._crawl()
         except CrawlerError as e:
-            self.__class__._log("exception", "crawler error: %s" % (repr(e)))
+            self._log("exception", "crawler error: %s" % (repr(e)))
+            raise
         except:
             e = sys.exc_info()[0]
-            self.__class__._log("exception", "unexpected crawler error: %s" % (repr(e)))
+            self._log("exception", "unexpected crawler error: %s" % (repr(e)))
+            raise
 
     def _add_image(self, uri):
         """
         :type uri: str
         :rtype: bool
         """
-        return self.__class__.__add_image(uri, crawler=self.__class__.__name__)
+        return self.__add_image(uri, crawler=self.__class__.__name__)
 
     ## abstract functions
 
