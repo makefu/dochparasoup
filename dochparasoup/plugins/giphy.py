@@ -2,7 +2,21 @@
 
 import json
 
-from . import Crawler, CrawlerError
+from dochparasoup.crawler import Crawler, CrawlerError
+from yapsy.IPlugin import IPlugin
+default_cat = 'dickbutt'
+base_uri = "http://api.giphy.com/v1/gifs/search?q={}"
+
+class GiphyPlugin(IPlugin):
+    def build(self,categories):
+        if not categories or 'true' in categories:
+            log.info('using default category {}'.format(default_cat))
+            categories = [default_cat]
+        elif 'false' in categories:
+            log.info('plugin disabled')
+            return []
+
+        return [ Giphy(base_uri.format(cat)) for cat in categories]
 
 
 class Giphy(Crawler):

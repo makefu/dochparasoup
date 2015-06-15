@@ -7,8 +7,22 @@ except ImportError:
 
 import json
 
-from . import Crawler, CrawlerError
+from yapsy.IPlugin import IPlugin
+default_board= 'dickbutt'
+base_uri = "http://www.reddit.com/r/{}"
 
+class RedditPlugin(IPlugin):
+    def build(self,boards):
+        if not boards or 'true' in boards:
+            log.info('using default board {}'.format(default_board))
+            boards = [default_board]
+        elif 'false' in boards:
+            log.info('plugin disabled')
+            return []
+
+        return [ Reddit(base_uri.format(board)) for board in boards]
+
+from dochparasoup.crawler import Crawler, CrawlerError
 
 class Reddit(Crawler):
     """ class def: a crawler for Reddit image threads """

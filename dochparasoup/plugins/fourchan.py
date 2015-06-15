@@ -6,7 +6,21 @@ except ImportError:
     from urlparse import urljoin        # py2
 
 
-from . import Crawler, CrawlerError
+from dochparasoup.crawler import Crawler, CrawlerError
+from yapsy.IPlugin import IPlugin
+
+base_uri = "http://boards.4chan.org/{}/"
+default_board = 'b'
+class FourchanPlugin(IPlugin):
+    def build(self,boards):
+        if not boards or 'true' in boards:
+            log.info('using default board /{}/'.format(default_board))
+            boards = [default_board]
+        elif 'false' in boards:
+            log.info('plugin disabled')
+            return []
+
+        return [ Fourchan(base_uri.format(board)) for board in boards]
 
 
 class Fourchan(Crawler):

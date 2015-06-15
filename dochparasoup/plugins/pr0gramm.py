@@ -6,8 +6,22 @@ try:
 except ImportError:
     from urlparse import urljoin        # py2
 
-from . import Crawler, CrawlerError
+from dochparasoup.crawler import Crawler, CrawlerError
+from yapsy.IPlugin import IPlugin
 
+default_cat = 'static'
+base_uri = "http://pr0gramm.com/static/{}"
+
+class Pr0grammPlugin(IPlugin):
+    def build(self,categories):
+        if not categories or 'true' in categories:
+            log.info('using default category {}'.format(default_cat))
+            categories = [default_cat]
+        elif 'false' in categories:
+            log.info('plugin disabled')
+            return []
+
+        return [ Pr0gramm(base_uri.format(cat)) for cat in categories]
 
 class Pr0gramm(Crawler):
     """ pr0gramm.com image provider"""

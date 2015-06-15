@@ -1,13 +1,10 @@
-
 import urllib
-
-from dochparasoup.crawler import Crawler, CrawlerError
-
-from yapsy.IPlugin import IPlugin
 
 import logging
 log = logging.getLogger("Bildschirmarbeiter")
 
+from dochparasoup.crawler import Crawler, CrawlerError
+from yapsy.IPlugin import IPlugin
 base_uri="http://www.bildschirmarbeiter.com/plugs/category/{}"
 default_cat = 'pics'
 

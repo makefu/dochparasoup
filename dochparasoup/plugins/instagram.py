@@ -8,7 +8,22 @@ except ImportError:
 import json
 
 
-from . import Crawler, CrawlerError
+from dochparasoup.crawler import Crawler, CrawlerError
+
+from yapsy.IPlugin import IPlugin
+default_cat = 'dickbutt'
+base_uri = "http://instagram.com/{}"
+
+class InstagramPlugin(IPlugin):
+    def build(self,categories):
+        if not categories or 'true' in categories:
+            log.info('using default category {}'.format(default_cat))
+            categories = [default_cat]
+        elif 'false' in categories:
+            log.info('plugin disabled')
+            return []
+
+        return [ Instagram(base_uri.format(cat)) for cat in categories]
 
 
 class Instagram(Crawler):

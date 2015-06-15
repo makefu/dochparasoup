@@ -1,0 +1,9 @@
+[Core]
+Name = soupio
+Module = soupio
+
+[Documentation]
+Author = k4cg
+Version = 0.1
+Website = http://nicht.parasoup.de
+Description = herp derp

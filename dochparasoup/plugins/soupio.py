@@ -5,8 +5,26 @@ try:
 except ImportError:
     from urlparse import urljoin        # py2
 
-from . import Crawler, CrawlerError
+from dochparasoup.crawler import Crawler, CrawlerError
+from yapsy.IPlugin import IPlugin
+default_cat = 'dickbutt'
+base_uri = "http://9gag.com/{}"
 
+
+frontpage_uri = "http://www.soup.io/everyone"
+user_uri =  "http://{}.soup.io"
+
+class SoupIOPlugin(IPlugin):
+    """ TODO: split into Public and User pages """
+    def build(self,users):
+        if not users or 'true' in users:
+            log.debug("using front page for soupio")
+            users = 'everyone'
+        elif 'false' in users:
+            log.info('plugin disabled')
+            return []
+        return  [SoupIO(frontpage_uri) if user in ["everyone"] else
+                SoupIO(user_uri.format(user)) for user in users]
 
 class SoupIO(Crawler):
     """ soup.io image provider """
