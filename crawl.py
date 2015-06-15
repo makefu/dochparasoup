@@ -103,13 +103,6 @@ def get_crawlers(configuration, section):
 
         crawler_uris = []
 
-        # mimic old behaviours for bool values
-        #if crawler_config.lower() == "true":
-        #    if crawler_class == Pr0gramm:
-        #        crawler_config = "static"
-        #    elif crawler_class == SoupIO:
-        #        crawler_config = "everyone"
-
         configured_categories = [url_quote_plus(site_stripped) for site_stripped in
                          [site.strip() for site in crawler_config.split(",")]   # trim sites
                          if site_stripped]  # filter stripped list for valid values
@@ -118,22 +111,6 @@ def get_crawlers(configuration, section):
         # configured
         crawlers += plug.build(configured_categories)
 
-        #if crawler_class == Reddit:
-        #    crawler_uris = ["http://www.reddit.com/r/%s" % site for site in crawler_sites]
-        #elif crawler_class == NineGag:
-        #    crawler_uris = ["http://9gag.com/%s" % site for site in crawler_sites]
-        #elif crawler_class == Pr0gramm:
-        #    crawler_uris = ["http://pr0gramm.com/static/%s" % site for site in crawler_sites]
-        #elif crawler_class == SoupIO:
-        #    crawler_uris = [("http://www.soup.io/%s" if site in ["everyone"]    # public site
-        #                     else "http://%s.soup.io") % site                   # user site
-        #                    for site in crawler_sites]
-        #elif crawler_class == Instagram:
-        #    crawler_uris = ["http://instagram.com/%s" % site for site in crawler_sites]
-        #elif crawler_class == Fourchan:
-        #    crawler_uris = ["http://boards.4chan.org/%s/" % site for site in crawler_sites]
-        #elif crawler_class == Giphy:
-        #    crawler_uris = ["http://api.giphy.com/v1/gifs/search?q=%s" % site for site in crawler_sites]
     logger.info("configured crawlers: {}".format(crawlers))
     return crawlers
 
