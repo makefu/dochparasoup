@@ -1,12 +1,9 @@
-
-__all__ = ['Crawler', 'CrawlerError']
-
+import os
 
 import sys
 import random
 import time
 import re
-
 try:
     from urllib.request import Request, urlopen     # py3
 except ImportError:
@@ -19,7 +16,6 @@ except ImportError:
 
 
 from bs4 import BeautifulSoup
-
 
 class Crawler(object):
     """

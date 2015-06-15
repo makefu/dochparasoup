@@ -1,13 +1,31 @@
 
 import urllib
-try:
-    from urllib.parse import urljoin    # py3
-except ImportError:
-    from urlparse import urljoin        # py2
 
-from . import Crawler, CrawlerError
+from dochparasoup.crawler import Crawler, CrawlerError
+
+from yapsy.IPlugin import IPlugin
+
 import logging
 log = logging.getLogger("Bildschirmarbeiter")
+
+base_uri="http://www.bildschirmarbeiter.com/plugs/category/{}"
+default_cat = 'pics'
+
+class BildschirmarbeiterPlugin(IPlugin):
+    def build(self,categories):
+        """
+        Bildschirmarbeiter factory
+        expects a list of categories
+        """
+        if not categories or 'true' in categories:
+            log.info('using default category {}'.format(default_cat))
+            categories = [default_cat]
+        elif 'false' in categories:
+            log.info('plugin disabled')
+            return []
+
+        return [ Bildschirmarbeiter(base_uri.format(cat)) for cat in categories]
+
 
 class Bildschirmarbeiter(Crawler):
     """ bildschirmarbeiter image provider """
@@ -17,7 +35,6 @@ class Bildschirmarbeiter(Crawler):
 
     @staticmethod
     def __build_uri(uri):
-        #return urljoin(uri, "?type=image")
         return uri
 
     def _restart_at_front(self):
@@ -29,6 +46,7 @@ class Bildschirmarbeiter(Crawler):
         """
         self.__uri = self.__build_uri(uri)
         self._restart_at_front()
+        
 
     def _crawl(self):
         uri = self.__next
@@ -61,3 +79,5 @@ class Bildschirmarbeiter(Crawler):
 
         if not new_imgs:
             log.warn("no images found for url {}".format(uri))
+
+

@@ -1,0 +1,9 @@
+[Core]
+Name = bildschirmarbeiter
+Module = bildschirmarbeiter
+
+[Documentation]
+Author = makefu
+Version = 0.1
+Website = http://euer.krebsco.de
+Description = herp derp
