@@ -35,7 +35,7 @@ class Crawler(object):
     ## class vars
 
     __configuration = {
-        __C_timeout_: 10,  # needs to be greater 0
+        __C_timeout_: 180,  # needs to be greater 0
         __C_headers_: {},  # additional headers
         __C_resetDelay_: 10800  # value in seconds
     }
@@ -206,6 +206,16 @@ class Crawler(object):
     @classmethod
     def _is_image(cls, uri):
         return cls.__image_RE.match(uri) is not None
+    
+    @classmethod
+    def _persist(cls,uri):
+        """ persists URL onto harddisk into 'General' -> 'imageSum'
+        """
+        imageSum = cls.__configuration.get('imageSum',None)
+        if imageSum:
+            with open(imageSum,'a+') as f:
+                cls._log('info','writing uri "{}" to imageSum "{}"'.format(uri,imageSum))
+                f.write("{}\n".format(uri))
 
     @classmethod
     def __images_clear(cls):
@@ -226,6 +236,7 @@ class Crawler(object):
             return False
 
         cls._blacklist(uri)  # add it to the blacklist to detect duplicates
+        cls._persist(uri)
         cls.__images.append("%s#%s" % (uri, crawler))
         cls._log("debug", "added: %s" % (uri))
         return True

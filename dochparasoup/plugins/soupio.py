@@ -12,7 +12,7 @@ base_uri = "http://9gag.com/{}"
 
 
 frontpage_uri = "http://www.soup.io/everyone"
-user_uri =  "http://{}.soup.io"
+user_uri =  "http://{}.soup.io/"
 
 class SoupIOPlugin(IPlugin):
     """ TODO: split into Public and User pages """
