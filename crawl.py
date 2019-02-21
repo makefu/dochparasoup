@@ -15,7 +15,7 @@ import argparse
 
 # this code just went full py3!
 import asyncio
-create_task = getattr(asyncio, 'async')
+create_task = asyncio.ensure_future
 try:
     from configparser import RawConfigParser    # py 3
 except ImportError:
