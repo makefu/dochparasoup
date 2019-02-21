@@ -15,6 +15,7 @@ import argparse
 
 # this code just went full py3!
 import asyncio
+create_task = getattr(asyncio, 'async')
 try:
     from configparser import RawConfigParser    # py 3
 except ImportError:
@@ -127,7 +128,7 @@ def main():
     if not sources: raise Exception("no sources configured")
     # scheduler here
 
-    asyncio.async(schedule_crawlers(sources))
+    create_task(schedule_crawlers(sources))
 
     try:
         loop.run_forever()
@@ -148,7 +149,7 @@ def schedule_source(source):
 def schedule_crawlers(sources):
     tasks = []
     for source in sources:
-        t = asyncio.async(schedule_source(source))
+        t = create_task(schedule_source(source))
         tasks.append(t)
         yield from asyncio.sleep(scheduler_timeout)
     log.info('finished scheduling, waiting for world to finish')
