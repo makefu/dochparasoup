@@ -55,7 +55,7 @@ nps_bindip = config.get("General", "IP")
 min_cache_imgs = config.getint("Cache", "Images")
 min_cache_imgs_before_refill = config.getint("Cache", "Images_min_limit")
 user_agent = config.get("General", "Useragent")
-imageSum = config.get("General","imageSum") or None
+imageSum = config.get("General","imageSum",fallback=None)
 logverbosity = config.get("Logging", "Verbosity")
 log = logging.getLogger(config.get("Logging", "Log_name"))
 #hdlr = logging.FileHandler(config.get("Logging", "File"))

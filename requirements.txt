@@ -7,3 +7,5 @@ beautifulsoup4
 ### adwanced html/xml parser & tree builders
 # html5lib
 # lxml
+yapsy
+docopt
